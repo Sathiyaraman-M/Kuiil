@@ -1,4 +1,4 @@
-# Kuill
+# Kuiil
 
 An experimental attempt to replace traditional CRUD UI with a chat interface.
 
