@@ -9,8 +9,7 @@ builder.AddProject<Projects.Kuiil_Books>("kuiil-books")
     .WaitFor(postgres);
 
 var vectorDB = builder.AddQdrant("vectordb")
-    .WithDataVolume("kuiil-vectordb-data")
-    .WithLifetime(ContainerLifetime.Persistent);
+    .WithDataVolume("kuiil-vectordb-data");
 
 builder.AddProject<Projects.Kuiil_UI>("kuiil-ui")
     .WithReference(vectorDB)
