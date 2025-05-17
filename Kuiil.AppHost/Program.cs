@@ -1,10 +1,19 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder.AddPostgres("kuiil-postgres")
-    .WithVolume("kuiil-postgres-data", "/var/lib/postgresql/data")
+    .WithDataVolume("kuiil-postgres-data")
     .AddDatabase("kuiil", "kuiil");
 
 builder.AddProject<Projects.Kuiil_Books>("kuiil-books")
-    .WithReference(postgres);
+    .WithReference(postgres)
+    .WaitFor(postgres);
+
+var vectorDB = builder.AddQdrant("vectordb")
+    .WithDataVolume("kuiil-vectordb-data")
+    .WithLifetime(ContainerLifetime.Persistent);
+
+builder.AddProject<Projects.Kuiil_UI>("kuiil-ui")
+    .WithReference(vectorDB)
+    .WaitFor(vectorDB);
 
 await builder.Build().RunAsync();
